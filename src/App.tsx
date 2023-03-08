@@ -1,13 +1,14 @@
-import type { FC } from 'react';
-import Uploader from './components/uploader'
-import ImageList from './components/imageList'
+import type { FC } from "react";
+import Uploader from "./components/uploader";
+import ImageList from "./components/imageList";
+import { PhotoProvider } from "./provider/photoContextProvider";
 
 const App: FC = () => (
   <div className="App">
-    <div style={{ height: '50vh' }}><ImageList /></div>
-    <div style={{ marginBottom: 0 }}>
+    <PhotoProvider>
+      <ImageList />
       <Uploader />
-    </div>
+    </PhotoProvider>
   </div>
 );
 

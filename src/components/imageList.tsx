@@ -1,18 +1,33 @@
-import React from 'react';
-import { Image } from 'antd';
+import React, { useContext, useEffect } from "react";
+import { Image } from "antd";
+import { PhotoContext } from '../provider/photoContextProvider'
 
-const App: React.FC = () => (
-  <Image.PreviewGroup
-    preview={{
-      onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-    }}
-  >
-    <Image width={200} src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
-    <Image
-      width={200}
-      src="http://localhost:9998/uploads/image-1678196963287.png"
-    />
-  </Image.PreviewGroup>
-);
+const App: React.FC = () => {
+  const imageContext = useContext(PhotoContext)
+  const imageList = imageContext.imageList
+
+  useEffect(() => {
+    getImages();
+  }, []);
+
+  const getImages = () => {
+    fetch("http://localhost:9998/images").then((res) => {
+      res.json().then((res: { images: string[] }) => {
+        imageContext.addImage(res.images)
+      });
+    });
+  };
+  return (
+    <Image.PreviewGroup
+      preview={{
+        onChange: (current, prev) =>
+          console.log(`current index: ${current}, prev index: ${prev}`),
+      }}
+    >
+      {imageList &&
+        imageList?.map((v) => <Image key={v} width={200} src={v} />)}
+    </Image.PreviewGroup>
+  );
+};
 
 export default App;

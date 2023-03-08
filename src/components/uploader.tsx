@@ -1,41 +1,39 @@
-import React from 'react';
-import { InboxOutlined } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
-import { message, Upload } from 'antd';
+import React, { useContext } from "react";
+import { UploadProps, FloatButton } from "antd";
+import { message, Upload } from "antd";
+import { PhotoContext } from "../provider/photoContextProvider";
+import { CloudUploadOutlined } from "@ant-design/icons";
 
-const { Dragger } = Upload;
-
-const props: UploadProps = {
-  name: 'image',
-  multiple: true,
-  action: 'http://localhost:9998/upload',
-  onChange(info) {
+const App: React.FC = () => {
+  const imageContext = useContext(PhotoContext);
+  const uploadChange: UploadProps["onChange"] = (info) => {
     const { status } = info.file;
-    if (status !== 'uploading') {
+    if (status !== "uploading") {
       console.log(info.file, info.fileList);
     }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
+    if (status === "done") {
+      console.log("info", info);
+      imageContext.addImage([info.file.response.imageUrl]);
+    } else if (status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
-  },
-  onDrop(e) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
+  };
+  return (
+    <Upload
+      name="image"
+      multiple={true}
+      action="http://localhost:9998/upload"
+      showUploadList={false}
+      onChange={uploadChange}
+    >
+      <FloatButton
+        shape="circle"
+        type="primary"
+        style={{ right: 94 }}
+        icon={<CloudUploadOutlined />}
+      />
+    </Upload>
+  );
 };
-
-const App: React.FC = () => (
-  < Dragger { ...props }>
-    <p className="ant-upload-drag-icon">
-      <InboxOutlined />
-    </p>
-    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-    <p className="ant-upload-hint">
-      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-      band files
-    </p>
-  </Dragger >
-);
 
 export default App;
