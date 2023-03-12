@@ -22,7 +22,7 @@ const App: React.FC = () => {
     <Upload
       name="image"
       multiple={true}
-      action="http://localhost:9998/upload"
+      action="http://114.116.22.167:9998/upload"
       showUploadList={false}
       onChange={uploadChange}
     >

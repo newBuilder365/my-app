@@ -11,7 +11,7 @@ const App: React.FC = () => {
   }, []);
 
   const getImages = () => {
-    fetch("http://localhost:9998/images").then((res) => {
+    fetch("http://114.116.22.167:9998/images").then((res) => {
       res.json().then((res: { images: string[] }) => {
         imageContext.addImage(res.images)
       });
